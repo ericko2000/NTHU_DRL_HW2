@@ -74,7 +74,7 @@ class Agent(object):
         self.main_DQN = DuelingDQN(num_actions=12, input_shape=self.state_shape).to(self.device)
         self.main_DQN.eval()
             
-        self.checkpoint = './111003804_hw2_data_195000.py'
+        self.checkpoint = './111003804_hw2_data.py'
         self.load_checkpoint(self.checkpoint)
         self.temperature = 10
 
@@ -118,7 +118,7 @@ class Agent(object):
     
     def act(self, state):
         self.play_states.append(copy.deepcopy(state))
-        if np.random.rand() <= 0.00:
+        if np.random.rand() <= 0.05:
             # Exploration: choose a random action
             return np.random.choice(self.action_size)
 
