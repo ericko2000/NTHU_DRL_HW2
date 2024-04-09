@@ -76,7 +76,6 @@ class Agent(object):
             
         self.checkpoint = './111003804_hw2_data.py'
         self.load_checkpoint(self.checkpoint)
-        self.temperature = 10
 
         self.play_states = deque(maxlen=4)
         self.skip = 4
