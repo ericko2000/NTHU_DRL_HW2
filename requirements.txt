@@ -1,4 +1,8 @@
+numpy
+Pillow
 torch
+nes-py
+
 Pillow
 tqdm
 requests
