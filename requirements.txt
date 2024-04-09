@@ -1,7 +1,6 @@
 numpy
 Pillow
 nes-py
-
 torch
 tqdm
 requests
