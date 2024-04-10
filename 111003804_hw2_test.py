@@ -93,16 +93,17 @@ class Agent(object):
         # Ensure states list has self.num_stack elements, repeating the first element if necessary
         while len(states) < self.num_stack:
             states.insert(0, states[0])  # Insert the first state at the beginning
-
+            
         processed_states = []
 
         for state in states:
             # Convert to PIL Image for resizing and grayscale conversion
-            state_image = Image.fromarray(state).convert('L')  # 'L' mode for grayscale
-
+            state_uint8 = state.astype(np.uint8)
+            state_image = Image.fromarray(state_uint8)
+            state_image = state_image.convert('L')
             # Resize
             state_resized = state_image.resize((84, 84), Image.Resampling.LANCZOS)
-
+ 
             # Convert back to NumPy array and normalize
             state_np = np.array(state_resized, dtype=np.float32) / 255.0  # Normalized to [0, 1]
 
@@ -115,18 +116,21 @@ class Agent(object):
 
     
     
-    def act(self, state):
-        self.play_states.append(copy.deepcopy(state))
+    def act(self, observation):
+        self.play_states.append(copy.deepcopy(observation))
+
         if np.random.rand() <= 0.05:
             # Exploration: choose a random action
             return np.random.choice(self.action_size)
 
         preprocessed_states = self._preprocess_state(list(self.play_states))
-        # Convert the state to a PyTorch tensor and add a batch dimension
+        # Convert the preprocessed_states to a PyTorch tensor and add a batch dimension
+
         state_tensor = torch.FloatTensor(preprocessed_states).unsqueeze(0).to(self.device)
 
         # Forward pass to get Q-values
         q_values = self.main_DQN(state_tensor)
+
         action = q_values.argmax().item()  # Get the action with the highest Q-value
 
         return action
